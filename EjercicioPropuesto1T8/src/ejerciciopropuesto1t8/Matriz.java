@@ -8,12 +8,17 @@ import java.util.Scanner;
 
 public class Matriz {
 
-    private int numf;
-    private int numc;
-    private int[][] matriz;
+    private  int numf;
+    private  int numc;
+    private  int[][] matriz;
     
     public static void main(String[] args) {
         
+        Matriz f1= new Matriz();
+        Matriz f2=new Matriz();
+        f1.solicitarTamanyo();
+        f2.solicitarTamanyo();
+        f1.suma(f2);
     }
 
 /*    public Matriz(int numf, int numc) {
@@ -22,20 +27,18 @@ public class Matriz {
         matriz= new int[numf][numc];
     }
 */            
-    private void solicitarTamanyo() {
+    private  void solicitarTamanyo() {
         Scanner sc= new Scanner(System.in);
-        int filas;
-        int columnas;
         System.out.print("Introduce el número de filas: ");
-        filas=sc.nextInt();
+        numf=sc.nextInt();
         System.out.println("Introduce el número de columnas: ");
-        columnas=sc.nextInt();
-        matriz= new int[filas][columnas];
+        numc=sc.nextInt();
+        matriz= new int[numf][numc];
 //        Matriz f1= new Matriz(filas, columnas);
         asignarDatos();
     }
     
-    private void asignarDatos() {
+    private  void asignarDatos() {
         if(matriz==null){
             System.out.println("No hay matriz...");
             return;
@@ -47,7 +50,7 @@ public class Matriz {
         }
     }
     
-    private int maximo() {
+    private  int maximo() {
         if(matriz==null)
             return -1;
         
@@ -61,7 +64,7 @@ public class Matriz {
         return max;
     }
     
-    private int minimo() {
+    private  int minimo() {
         if(matriz==null)
             return -1;        
         int min = matriz[0][0];
@@ -73,7 +76,28 @@ public class Matriz {
         }
         return min;
     }
-    
-    
+
+    public int getNumf() {
+        return numf;
+    }
+
+    public int getNumc() {
+        return numc;
+    }
+
+    public  int[][] getMatriz() {
+        return matriz;
+    }
+            
+    private void suma(Matriz matriz) {
+        if(numf==matriz.getNumf()&&numc==matriz.getNumc()) {
+            for(int i = 0; i<this.matriz.length;i++) {
+                for (int j=0 ; j<this.matriz[j].length; j++) {
+                    this.matriz[i][j]=this.matriz[i][j]+matriz.getMatriz()[i][j];
+                }
+                
+            }
+        }
+    }
         
 }

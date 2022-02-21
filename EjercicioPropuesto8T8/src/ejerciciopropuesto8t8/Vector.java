@@ -31,20 +31,26 @@ public class Vector {
         for (int i = 0; i < vector.length; i++) {
             vectoraux[vector[i]]++;
         }
+        System.out.println("Vector auxiliar: ");
+        System.out.println(Arrays.toString(vectoraux));
+        System.out.println("");
         return vectoraux;
     }
     
     public static void elementoMasRepetido() {
-        int elemento=0;
+        int mayorelemento=0;
         for(int i=0; i<vectoraux.length; i++) {
-            if (vectoraux[i]>elemento) {
-                elemento=vectoraux[i];
+            if (vectoraux[i]>mayorelemento) {
+                mayorelemento=vectoraux[i];
             }
         }
+        String frase="El elemento más repetido aparece "+mayorelemento+" veces y es el ";
         for(int i=0; i<vectoraux.length; i++) {
-            if (vectoraux[i]==elemento) {
-                System.out.println("El elemento mas repetido es el "+i+" y aparece repetido "+vectoraux[i]+" veces");
+            if (vectoraux[i]==mayorelemento) {
+                frase+=i+" ";
+//                System.out.println("El elemento mas repetido es el "+i+" y aparece repetido "+vectoraux[i]+" veces");
             }
         }
+        System.out.println(frase);
     }
 }

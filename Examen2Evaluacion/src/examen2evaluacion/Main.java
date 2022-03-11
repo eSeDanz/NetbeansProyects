@@ -114,10 +114,10 @@ public class Main {
         for (Figura fig : figuras) {
             if (fig instanceof Triangulo) {
                 System.out.println("TRIÁNGULO");
-                
+
             } else if (fig instanceof Rectangulo) {
                 System.out.println("RECTÁNGULO");
-                
+
             } else if (fig instanceof Hexagono) {
                 System.out.println("HEXÁGONO");
                 

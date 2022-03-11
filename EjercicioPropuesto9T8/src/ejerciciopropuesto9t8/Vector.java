@@ -26,7 +26,7 @@ public class Vector {
         System.out.println("");
         return vector;
     }
-    
+
     public static void mostrarNoAlmacenados() {
         int[] vectoraux= new int[101];
         for (int i=0; i<vector.length;i++) {

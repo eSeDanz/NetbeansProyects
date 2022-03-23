@@ -50,7 +50,8 @@ public abstract class Dinero {
 
     @Override
     public String toString() {
-        return "valor: " + valor + "\naño: " + anyoEmi;
+        return "Valor: " + valor + 
+               "\nAño: " + anyoEmi;
 
     }
 

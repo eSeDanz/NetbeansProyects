@@ -19,4 +19,12 @@ public class Moneda extends Dinero {
         this.diametro= f1.diametro;
         this.peso= f1.peso;
     }
+    
+    @Override
+    public String toString() {
+        return "MONEDA\n" + 
+               super.toString() +
+               "\nDiametro: " + diametro +
+               "\nPeso: " + peso;
+    }
 }

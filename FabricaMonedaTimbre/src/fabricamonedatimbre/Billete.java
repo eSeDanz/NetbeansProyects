@@ -24,9 +24,11 @@ public class Billete extends Dinero {
         this.anchura= f1.anchura;
     }   
     
-     @Override
+    @Override
     public String toString() {
-        return "BILLETE" ;
-
+        return "BILLETE\n" + 
+               super.toString() +
+               "\nAltura: " + altura +
+               "\nAnchura: " + anchura;
     }
 }

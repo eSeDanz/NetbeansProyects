@@ -5,6 +5,7 @@
 package fabricamonedatimbre;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class TestDinero {
@@ -13,12 +14,12 @@ public class TestDinero {
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Billete b1 = new Billete(5.2, 12.5, 10, 1986);
-        Moneda m1 = new Moneda(24.5, 7, 1, 2001);
-
+        crearObjetos();
+        crearObjetos();
+        mostrarPorPantalla();
     }
 
-    public void crearObjetos() {
+    public static void crearObjetos() {
         String timbre;
         double valor;
         int anyoEmi;
@@ -31,10 +32,10 @@ public class TestDinero {
         do {
             System.out.print("Introduce el tipo de timbre que quieres crear (moneda/billete): ");
             timbre = sc.next();
-            if (!timbre.equalsIgnoreCase("moneda") || !timbre.equalsIgnoreCase("billete")) {
+            if (!timbre.equalsIgnoreCase("moneda") && !timbre.equalsIgnoreCase("billete")) {
                 System.out.println("La respuesta introducida no es correcta");
             }
-        } while (!timbre.equalsIgnoreCase("moneda") || !timbre.equalsIgnoreCase("billete"));
+        } while (!timbre.equalsIgnoreCase("moneda") && !timbre.equalsIgnoreCase("billete"));
         if (timbre.equalsIgnoreCase("moneda")) {
             System.out.print("Introduce el valor: ");
             valor = sc.nextDouble();
@@ -45,6 +46,8 @@ public class TestDinero {
             System.out.print("Introduce el peso: ");
             peso = sc.nextDouble();
             Moneda m1 = new Moneda(diametro, peso, valor, anyoEmi);
+            dineros.add(m1);
+            System.out.println("Moneda añadida en el ArrayList\n");
         } else {
             System.out.print("Introduce el valor: ");
             valor = sc.nextDouble();
@@ -55,6 +58,28 @@ public class TestDinero {
             System.out.print("Introduce la anchura: ");
             anchura = sc.nextDouble();
             Billete b1 = new Billete(altura, anchura, valor, anyoEmi);
+            dineros.add(b1);
+            System.out.println("Billete añadido en el ArrayList\n");
+        }
+    }
+
+    public static void mostrarPorPantalla() {
+        if (dineros.isEmpty()) {
+            System.out.println("No hay elementos que mostrar");
+        } else {
+            for (Dinero elemento : dineros) {
+                System.out.println(elemento.toString());
+                System.out.println("");
+            }
+        }
+    }
+
+    public static void comprobarDuplicados() {
+        if (!dineros.isEmpty()) {
+            HashMap<Dinero, Integer> duplicados;
+            
+        } else {
+            System.out.println("No hay elementos en la colección");
         }
     }
 }

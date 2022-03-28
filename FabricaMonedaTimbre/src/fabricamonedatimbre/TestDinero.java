@@ -16,7 +16,9 @@ public class TestDinero {
     public static void main(String[] args) {
         crearObjetos();
         crearObjetos();
+        crearObjetos();
         mostrarPorPantalla();
+        comprobarDuplicados();
     }
 
     public static void crearObjetos() {
@@ -76,7 +78,24 @@ public class TestDinero {
 
     public static void comprobarDuplicados() {
         if (!dineros.isEmpty()) {
-            HashMap<Dinero, Integer> duplicados;
+            HashMap<Dinero, Integer> duplicados = new HashMap<>();
+            for (int i=0; i<dineros.size(); i++) {
+                int contador=1;
+                for (int j=i+1; j<dineros.size(); j++) {
+                    if (dineros.get(i).equals(dineros.get(j))) {
+                        contador++;
+                        duplicados.put(dineros.get(i), contador);
+                    }
+                }                
+            }
+            
+            if (!duplicados.isEmpty()) {
+                for(Dinero d: duplicados.keySet()) {
+                    System.out.println(d.toString());
+                    System.out.println("Número de repeticiones: " + duplicados.get(d));
+                }
+            }else
+                System.out.println("No hay duplicados");
             
         } else {
             System.out.println("No hay elementos en la colección");

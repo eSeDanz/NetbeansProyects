@@ -52,7 +52,6 @@ public abstract class Dinero {
     public String toString() {
         return "Valor: " + valor + 
                "\nAño: " + anyoEmi;
-
     }
 
 }

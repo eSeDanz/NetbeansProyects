@@ -92,7 +92,7 @@ public class TestDinero {
             if (!duplicados.isEmpty()) {
                 for(Dinero d: duplicados.keySet()) {
                     System.out.println(d.toString());
-                    System.out.println("Número de repeticiones: " + duplicados.get(d));
+                    System.out.println("Número de repeticiones: " + duplicados.get(d)+"\n");
                 }
             }else
                 System.out.println("No hay duplicados");

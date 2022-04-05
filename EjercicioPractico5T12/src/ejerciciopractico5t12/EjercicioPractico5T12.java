@@ -9,7 +9,8 @@ public class EjercicioPractico5T12 {
 
 
     public static void main(String[] args) {
-        
+        String hola;
+                
     }
     
 }

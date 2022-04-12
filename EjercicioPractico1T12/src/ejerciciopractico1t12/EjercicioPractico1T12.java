@@ -23,19 +23,22 @@ public class EjercicioPractico1T12 {
 
     public static void introducirFrases() {
         try {
-            System.out.print("Introduce una frase al archivo destino: ");
-            String frase = sc.nextLine();
+            String frase;
             FileWriter fw;
-            System.out.print("Quieres sobreescribir el archivo?(S/N): ");
-            if (sc.nextLine().equalsIgnoreCase("S")) {
-                fw = new FileWriter("/home/alumno/ficheros/EjercicioPractico1T12.txt");
-            } else {
-                fw = new FileWriter("/home/alumno/ficheros/EjercicioPractico1T12.txt", true);
-            }
             do {
-                fw.write(frase);
+                System.out.print("Introduce una frase al archivo destino: ");
+                frase = sc.nextLine();
+                if (!frase.equals("99")) {
+                    System.out.print("Quieres sobreescribir el archivo?(S/N): ");
+                    if (sc.nextLine().equalsIgnoreCase("S")) {
+                        fw = new FileWriter("/home/alumno/ficheros/EjercicioPractico1T12.txt");
+                    } else {
+                        fw = new FileWriter("/home/alumno/ficheros/EjercicioPractico1T12.txt", true);
+                    }
+                    fw.write(frase + "\n");
+                    fw.close();
+                }
             } while (!frase.equals("99"));
-            fw.close();
         } catch (IOException ioe) {
             System.out.println("Excepción de entrada/salida");
         }
@@ -50,6 +53,7 @@ public class EjercicioPractico1T12 {
                     System.out.print((char) i);
                 }
             }
+            fr.close();
         } catch (IOException ioe) {
             System.out.println("Excepción de entrada/salida");
         }

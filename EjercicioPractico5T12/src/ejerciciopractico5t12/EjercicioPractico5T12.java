@@ -20,9 +20,9 @@ public class EjercicioPractico5T12 {
     public static void main(String[] args) throws FileNotFoundException, IOException {
         System.out.print("Introduce la cantidad de numeros enteros y positivos que quieres generar: ");
         int cantidad = sc.nextInt();
-        System.out.print("Introduce la ruta del fichero de destino: ");
         sc.nextLine();
-        String destino = sc.next();
+        System.out.print("Introduce la ruta del fichero de destino: ");
+        String destino = sc.nextLine();
         try {
             FileOutputStream fos = new FileOutputStream(destino, true);
             DataOutputStream dos = new DataOutputStream(fos);
@@ -30,17 +30,23 @@ public class EjercicioPractico5T12 {
                 int random = (int) (Math.random() * 101 + 0);
                 dos.writeInt(random);
             }
-        } catch (IOException ioe) {
-            System.out.println(ioe);
-        }
-        try {
+            dos.close();
+            fos.close();
+//        } catch (IOException ioe) {
+//            System.out.println(ioe);
+//        }
+//        try {
             FileInputStream fis = new FileInputStream(destino);
             DataInputStream dis = new DataInputStream(fis);
             while (true) {
                 System.out.println(dis.readInt());
             }
+            dis.close();
+            fis.close();
         } catch (EOFException e) {
             System.out.println("Fin de Fichero");
+        } catch (IOException ioe) {
+//            System.out.println(ioe);
         }
     }
 

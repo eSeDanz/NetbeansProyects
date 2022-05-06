@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             int filas;
-            System.out.print("Introduce el tamaño de lado del cuadrado: ");
+            System.out.print("Introduce el numero de filas: ");
             filas = sc.nextInt();
             for (int i = 1; i <= filas; i++) {
                 for (int k = 1; k <= filas - i; k++) {

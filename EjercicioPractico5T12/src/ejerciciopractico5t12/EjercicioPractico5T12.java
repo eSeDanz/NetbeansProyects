@@ -11,43 +11,83 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class EjercicioPractico5T12 {
 
     private static Scanner sc = new Scanner(System.in);
+    private static int cantidad;
+    private static String destino;
+    private static int contador = 0;
 
-    public static void main(String[] args) throws FileNotFoundException, IOException {
-        System.out.print("Introduce la cantidad de numeros enteros y positivos que quieres generar: ");
-        int cantidad = sc.nextInt();
+    public static void main(String[] args) {
+        escribirAleatorios();
+        leer();
+        añadirAleatorios();
+        leer();
+    }
+
+    public static void escribirAleatorios() {
+        System.out.print("Introduce la cantidad de numeros aleatorios enteros y positivos que quieres generar: ");
+        cantidad = sc.nextInt();
         sc.nextLine();
         System.out.print("Introduce la ruta del fichero de destino: ");
-        String destino = sc.nextLine();
+        destino = sc.nextLine();
         try {
             FileOutputStream fos = new FileOutputStream(destino, true);
             DataOutputStream dos = new DataOutputStream(fos);
             for (int i = 0; i < cantidad; i++) {
-                int random = (int) (Math.random() * 101 + 0);
-                dos.writeInt(random);
+//              int random = (int) (Math.random() * 101 + 0);
+                dos.writeInt(generarAleatorio());
+                contador++;
             }
             dos.close();
             fos.close();
-//        } catch (IOException ioe) {
-//            System.out.println(ioe);
-//        }
-//        try {
+        } catch (IOException ioe) {
+            System.out.println("Excepción de entrada/salida");
+        }
+    }
+
+    public static int generarAleatorio() {
+        int aleatorio;
+        Random rnd = new Random();
+        aleatorio = rnd.nextInt(101) + 0;
+        return aleatorio;
+    }
+
+    public static void añadirAleatorios() {
+        System.out.print("\nIntroduce la cantidad de numeros aleatorios que quieres añadir: ");
+        cantidad = sc.nextInt();
+        sc.nextLine();
+        try {
+            FileOutputStream fos = new FileOutputStream(destino, true);
+            DataOutputStream dos = new DataOutputStream(fos);
+            for (int i = 0; i < cantidad; i++) {
+                dos.writeInt(generarAleatorio());
+                contador++;
+            }
+            dos.close();
+            fos.close();
+        } catch (IOException ioe) {
+            System.out.println("Excepción de entrada/salida");
+        }
+    }
+
+    public static void leer() {
+        System.out.println("Leyendo el archivo");
+        try {
             FileInputStream fis = new FileInputStream(destino);
             DataInputStream dis = new DataInputStream(fis);
-            while (true) {
-                System.out.println(dis.readInt());
+            for (int i = 1; i <= contador; i++) {
+                System.out.print(dis.readInt()+" ");
             }
             dis.close();
             fis.close();
         } catch (EOFException e) {
             System.out.println("Fin de Fichero");
         } catch (IOException ioe) {
-//            System.out.println(ioe);
+            System.out.println(ioe.getMessage());
         }
     }
-
 }

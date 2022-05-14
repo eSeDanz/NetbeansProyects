@@ -19,7 +19,6 @@ public class EjercicioPractico5T12 {
     private static Scanner sc = new Scanner(System.in);
     private static int cantidad;
     private static String destino;
-    private static int contador = 0;
 
     public static void main(String[] args) {
         escribirAleatorios();
@@ -40,7 +39,6 @@ public class EjercicioPractico5T12 {
             for (int i = 0; i < cantidad; i++) {
 //              int random = (int) (Math.random() * 101 + 0);
                 dos.writeInt(generarAleatorio());
-                contador++;
             }
             dos.close();
             fos.close();
@@ -65,7 +63,6 @@ public class EjercicioPractico5T12 {
             DataOutputStream dos = new DataOutputStream(fos);
             for (int i = 0; i < cantidad; i++) {
                 dos.writeInt(generarAleatorio());
-                contador++;
             }
             dos.close();
             fos.close();
@@ -79,7 +76,8 @@ public class EjercicioPractico5T12 {
         try {
             FileInputStream fis = new FileInputStream(destino);
             DataInputStream dis = new DataInputStream(fis);
-            for (int i = 1; i <= contador; i++) {
+            int enteros = fis.available()/Integer.BYTES;
+            for (int i = 1; i <= enteros; i++) {
                 System.out.print(dis.readInt()+" ");
             }
             dis.close();

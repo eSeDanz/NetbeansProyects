@@ -4,6 +4,7 @@
  */
 package ejerciciopractico1t12;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -31,11 +32,11 @@ public class EjercicioPractico1T12 {
                 if (!frase.equals("99")) {
                     System.out.print("Quieres sobreescribir el archivo?(S/N): ");
                     if (sc.nextLine().equalsIgnoreCase("S")) {
-                        fw = new FileWriter("/home/alumno/ficheros/EjercicioPractico1T12.txt");
+                        fw = new FileWriter("C:\\Users\\Dani\\Desktop\\1º DAM\\Programacion\\PRO Tema 12 Lectura y escritura de información\\EjercicioPractico1T12.txt");
                     } else {
-                        fw = new FileWriter("/home/alumno/ficheros/EjercicioPractico1T12.txt", true);
+                        fw = new FileWriter("C:\\Users\\Dani\\Desktop\\1º DAM\\Programacion\\PRO Tema 12 Lectura y escritura de información\\EjercicioPractico1T12.txt", true);
                     }
-                    fw.write(frase + "\n");
+                    fw.write(frase);
                     fw.close();
                 }
             } while (!frase.equals("99"));
@@ -44,9 +45,9 @@ public class EjercicioPractico1T12 {
         }
     }
 
-    public static void leer() {
+    public static void leer()  {
         try {
-            FileReader fr = new FileReader("/home/alumno/ficheros/EjercicioPractico1T12.txt");
+            FileReader fr = new FileReader("C:\\Users\\Dani\\Desktop\\1º DAM\\Programacion\\PRO Tema 12 Lectura y escritura de información\\EjercicioPractico1T12.txt");
             int i;
             while ((i = fr.read()) != -1) {
                 if (i != ' ') {

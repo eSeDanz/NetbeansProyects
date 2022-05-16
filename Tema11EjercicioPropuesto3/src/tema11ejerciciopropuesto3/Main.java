@@ -22,12 +22,10 @@ public class Main {
                 }
                 System.out.println("");
             }
-        } catch (InputMismatchException f1)  {
+        } catch (InputMismatchException f1) {
             System.out.println("Error en el tipo de datos introducidos");
         }
-        }
-
-    
+    }
 
     public static int cuadradoRecursivo(int fila, int columna) {
         if (fila == 1 || columna == 1) {

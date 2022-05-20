@@ -4,6 +4,8 @@
  */
 package ejerciciopractico7t12;
 
+import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -20,17 +22,18 @@ public class Vehiculo implements Serializable {
     private String marca;
     private String modelo;
     private transient double tamDepo;
-    private static final String RUTA = "C:\\Users\\Dani\\Rogelio\\NetbeansProyects\\EjercicioPractico7T12\\src\\ejerciciopractico7t12\\Serializado.bin";
+    private static final String RUTA = "/home/alumno/NetBeansProjects/EjercicioPractico7T12/src/ejerciciopractico7t12/Serializado.bin";
     private static final long serialVersionUID = 1L;
     private static Scanner sc = new Scanner(System.in);
-    
+
     public static void main(String[] args) throws IOException, FileNotFoundException, ClassNotFoundException {
-        Vehiculo v1= new Vehiculo("4554-KFK", "Mini", "John Cooper Works", 40);
+        Vehiculo v1 = new Vehiculo();
+        v1 = v1.solicitarDatos();
         serializar(v1);
-        Vehiculo recuperado=leerSerializado();
-        System.out.println(recuperado.matricula);
-        System.out.println(recuperado.marca);
-        System.out.println(recuperado.modelo);
+        leerSerializado();
+    }
+
+    public Vehiculo() {
     }
 
     public Vehiculo(String matricula, String marca, String modelo, double tamDepo) {
@@ -71,9 +74,10 @@ public class Vehiculo implements Serializable {
     public void setTamDepo(double tamDepo) {
         this.tamDepo = tamDepo;
     }
-    
-    public void solicitarDatos() {   
+
+    public Vehiculo solicitarDatos() {
         boolean error;
+        Vehiculo v1;
         do {
             error = false;
             try {
@@ -88,24 +92,50 @@ public class Vehiculo implements Serializable {
             } catch (InputMismatchException ime) {
                 System.out.println("Error en el tipo de datos introducidos");
                 error = true;
-            } sc.nextLine();
+            }
+            sc.nextLine();
         } while (error);
+        v1 = new Vehiculo(matricula, marca, modelo, tamDepo);
+        return v1;
     }
-    
-    public static void serializar(Vehiculo v) throws FileNotFoundException, IOException{
-        FileOutputStream fos= new FileOutputStream(RUTA);
-        ObjectOutputStream oos=new ObjectOutputStream(fos);
-        oos.writeObject(v);
-        oos.close();
-        fos.close();
+
+    public static void serializar(Vehiculo v) throws FileNotFoundException, IOException {
+        File fichero = new File(RUTA);
+        if (fichero.exists()) {
+            FileOutputStream fos = new FileOutputStream(RUTA, true);
+            MiObjectOutputStream moos = new MiObjectOutputStream(fos);
+            moos.writeObject(v);
+            moos.close();
+        } else {
+            FileOutputStream fos = new FileOutputStream(RUTA);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(v);
+            oos.close();
+            fos.close();
+        }
     }
-    
-    public static Vehiculo leerSerializado() throws FileNotFoundException, IOException, ClassNotFoundException{
-        FileInputStream fis= new FileInputStream(RUTA);
-        ObjectInputStream ois= new ObjectInputStream(fis);
-        Vehiculo recuperado= (Vehiculo)ois.readObject();
+
+    public static void leerSerializado() throws FileNotFoundException, IOException, ClassNotFoundException {
+        boolean fin = false;
+        FileInputStream fis = new FileInputStream(RUTA);
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        while (!fin) {
+            try {
+                Vehiculo recuperado = (Vehiculo) ois.readObject();
+                System.out.println(recuperado.toString());
+
+            } catch (EOFException eofe) {
+                System.out.println("Fin de archivo");
+                fin = true;
+            }
+        }
         ois.close();
         fis.close();
-        return recuperado;
     }
+
+    @Override
+    public String toString() {
+        return "Vehiculo{" + "matricula=" + matricula + ", marca=" + marca + ", modelo=" + modelo + ", tamDepo=" + tamDepo + '}';
+    }
+    
 }

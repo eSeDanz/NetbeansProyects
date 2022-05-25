@@ -8,7 +8,7 @@ public class Moneda extends Dinero {
     private double diametro;
     private double peso;
 
-    public Moneda(double diametro, double peso, double valor, int anyoEmi) {
+    public Moneda(double valor, int anyoEmi, double diametro, double peso) {
         super(valor, anyoEmi);
         this.diametro = diametro;
         this.peso = peso;
@@ -18,6 +18,22 @@ public class Moneda extends Dinero {
         super(f1.getValor(), f1.getAnyoEmi());
         this.diametro= f1.diametro;
         this.peso= f1.peso;
+    }
+
+    public double getDiametro() {
+        return diametro;
+    }
+
+    public double getPeso() {
+        return peso;
+    }
+
+    public void setDiametro(double diametro) {
+        this.diametro = diametro;
+    }
+
+    public void setPeso(double peso) {
+        this.peso = peso;
     }
     
     @Override

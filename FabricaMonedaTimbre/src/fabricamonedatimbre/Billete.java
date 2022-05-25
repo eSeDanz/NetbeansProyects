@@ -4,15 +4,11 @@
  */
 package fabricamonedatimbre;
 
-/**
- *
- * @author alumno
- */
 public class Billete extends Dinero {
     private double altura;
     private double anchura;
 
-    public Billete(double altura, double anchura, double valor, int anyoEmi) {
+    public Billete(double valor, int anyoEmi, double altura, double anchura) {
         super(valor, anyoEmi);
         this.altura = altura;
         this.anchura = anchura;
@@ -23,6 +19,22 @@ public class Billete extends Dinero {
         this.altura= f1.altura;
         this.anchura= f1.anchura;
     }   
+
+    public void setAltura(double altura) {
+        this.altura = altura;
+    }
+
+    public void setAnchura(double anchura) {
+        this.anchura = anchura;
+    }
+
+    public double getAltura() {
+        return altura;
+    }
+
+    public double getAnchura() {
+        return anchura;
+    }
     
     @Override
     public String toString() {

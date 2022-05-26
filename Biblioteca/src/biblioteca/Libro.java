@@ -26,8 +26,8 @@ public class Libro implements Serializable {
         this.numPasillo = numPasillo;
         this.ISBN = ISBN;
         this.precio = precio;
-        this.bibliotecario = null;
-        this.usuario = null;
+        this.bibliotecario = "";
+        this.usuario = "";
         this.prestado = false;
     }
 

@@ -218,36 +218,41 @@ public class Biblioteca {
         int op;
         do {
             op = menuBusqueda();
-            switch (op) {
-                case 1:
-                    buscarPorTitulo();
-                    break;
-                case 2:
-                    buscarPorAutor();
-                    break;
-                case 3:
-                    buscarPorEditorial();
-                    break;
-                case 4:
-                    buscarPorUbicacion();
-                    break;
-                case 5:
-                    buscarPorISBN();
-                    break;
-                case 6:
-                    buscarPorBibliotecario();
-                    break;
-                case 7:
-                    buscarPorPrestado();
-                    break;
-                case 8:
-                    buscarPorUsuario();
-                    break;
-                case 9:
-                    System.out.println("Saliendo del menú de busqueda...");
-                    break;
-                default:
-                    System.out.println("Te has equivocado de número...");
+            try {
+
+                switch (op) {
+                    case 1:
+                        buscarPorTitulo();
+                        break;
+                    case 2:
+                        buscarPorAutor();
+                        break;
+                    case 3:
+                        buscarPorEditorial();
+                        break;
+                    case 4:
+                        buscarPorUbicacion();
+                        break;
+                    case 5:
+                        buscarPorISBN();
+                        break;
+                    case 6:
+                        buscarPorBibliotecario();
+                        break;
+                    case 7:
+                        buscarPorPrestado();
+                        break;
+                    case 8:
+                        buscarPorUsuario();
+                        break;
+                    case 9:
+                        System.out.println("Saliendo del menú de busqueda...");
+                        break;
+                    default:
+                        System.out.println("Te has equivocado de número...");
+                }
+            } catch (InputMismatchException ime) {
+                System.out.println("Error en el tipo de datos introducidos");
             }
         } while (op != 9);
     }

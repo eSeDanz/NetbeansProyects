@@ -14,6 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -26,7 +27,7 @@ public class Biblioteca {
     private static final String RUTA = "C:\\Users\\Dani\\Rogelio\\NetbeansProyects\\Biblioteca\\src\\biblioteca\\Serializado.bin";
     private static DecimalFormat formato = new DecimalFormat("###0.##");
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ConcurrentModificationException {
         recuperarDatos();
         int opcion;
         do {
@@ -59,6 +60,7 @@ public class Biblioteca {
                     break;
                 default:
                     System.out.println("Te has equivocado de número...");
+                    break;
             }
         } while (opcion != 10);
         serializar(empleados, usuarios, libros);
@@ -115,35 +117,35 @@ public class Biblioteca {
         }
     }
 
-    public static void recuperarDatos(){
+    public static void recuperarDatos() {
         try {
             File fichero = new File(RUTA);
             boolean fin = false;
             String respuesta;
-            System.out.print("Quieres recuperar la sesión anterior? s/n: ");
-            respuesta = sc.nextLine();
-            if (respuesta.equalsIgnoreCase("n")) {
-                System.out.println("Continuaremos con los valores por defecto de usuarios, empleados y libros...");
-                defaultValues();
-            } else if (respuesta.equalsIgnoreCase("s")) {
-                if (fichero.exists()) {
-                    FileInputStream fis = new FileInputStream(RUTA);
-                    ObjectInputStream ois = new ObjectInputStream(fis);
-                    empleados = (ArrayList<Empleado>) ois.readObject();
-                    usuarios = (ArrayList<Usuario>) ois.readObject();
-                    libros = (ArrayList<Libro>) ois.readObject();
-                    ois.close();
-                    fis.close();
-                } else {
-                    System.out.println("Imposible recuperar datos, es la primera ejecución del programa");
+            do {
+                System.out.print("Quieres recuperar la sesión anterior? s/n: ");
+                respuesta = sc.nextLine();
+                if (respuesta.equalsIgnoreCase("n")) {
                     System.out.println("Continuaremos con los valores por defecto de usuarios, empleados y libros...");
                     defaultValues();
+                } else if (respuesta.equalsIgnoreCase("s")) {
+                    if (fichero.exists()) {
+                        FileInputStream fis = new FileInputStream(RUTA);
+                        ObjectInputStream ois = new ObjectInputStream(fis);
+                        empleados = (ArrayList<Empleado>) ois.readObject();
+                        usuarios = (ArrayList<Usuario>) ois.readObject();
+                        libros = (ArrayList<Libro>) ois.readObject();
+                        ois.close();
+                        fis.close();
+                    } else {
+                        System.out.println("Imposible recuperar datos, es la primera ejecución del programa");
+                        System.out.println("Continuaremos con los valores por defecto de usuarios, empleados y libros...");
+                        defaultValues();
+                    }
+                } else {
+                    System.out.println("Te has equivocado al introducir la respuesta");
                 }
-            } else {
-                System.out.println("Te has equivocado al introducir la respuesta, no se recuperará la sesión anterior");
-                System.out.println("Continuaremos con los valores por defecto de usuarios, empleados y libros...");
-                defaultValues();
-            }
+            } while (!(respuesta.trim().equalsIgnoreCase("s") || respuesta.trim().equalsIgnoreCase("n")));
         } catch (FileNotFoundException fnfe) {
             System.out.println("Archivo no encontrado");
         } catch (IOException ioe) {
@@ -201,6 +203,7 @@ public class Biblioteca {
             sc.nextLine();
             Libro l = new Libro(titulo, autor, editorial, numPasillo, ISBN, precio);
             libros.add(l);
+            System.out.println("Libro añadido con éxito");
         } catch (InputMismatchException ime) {
             System.out.println("Error en el tipo de datos introducidos");
         }
@@ -209,7 +212,7 @@ public class Biblioteca {
     public static int menuBusqueda() {
         int opcion;
         try {
-            System.out.print("\nBUSQUEDA DE LIBROS POR CATEGORÍA"
+            System.out.print("\nBUSQUEDA DE LIBROS POR CATEGORÍA:"
                     + "\n(1) Título"
                     + "\n(2) Autor"
                     + "\n(3) Editorial"
@@ -251,12 +254,14 @@ public class Biblioteca {
                         buscarPorISBN();
                         break;
                     case 6:
+                        mostrarBibliotecarios();
                         buscarPorBibliotecario();
                         break;
                     case 7:
                         buscarPorPrestado();
                         break;
                     case 8:
+                        mostrarUsuarios();
                         buscarPorUsuario();
                         break;
                     case 9:
@@ -336,16 +341,26 @@ public class Biblioteca {
         System.out.print("\nIntroduce el nombre del bibliotecario que prestó el libro: ");
         String bibliotecario = sc.nextLine();
         int index = 0;
-        int indexDos = 1;
-        for (Libro l : libros) {
-            if (l.getBibliotecario().trim().equalsIgnoreCase(bibliotecario.trim())) {
-                System.out.print("Libro prestado por " + bibliotecario + ", número " + index + ": " + l.toString());
-                indexDos++;
+        int indexAlquilado = 1;
+        int indexEmpleado = 0;
+        for (Empleado e : empleados) {
+            if (empleados.contains(bibliotecario)) {
+                indexEmpleado++;
             }
-            index++;
         }
-        if (indexDos == 1) {
-            System.out.println(bibliotecario + " no tiene libros prestados en estos momentos");
+        if (indexEmpleado == 1) {
+            for (Libro l : libros) {
+                if (l.getBibliotecario().trim().equalsIgnoreCase(bibliotecario.trim())) {
+                    System.out.print("Libro prestado por " + bibliotecario + ", número " + index + ": " + l.toString());
+                    indexAlquilado++;
+                }
+                index++;
+            }
+            if (indexAlquilado == 1) {
+                System.out.println(bibliotecario + " no tiene libros prestados en estos momentos");
+            }
+        } else {
+            System.out.println("No existe ese empleado");
         }
     }
 
@@ -368,16 +383,26 @@ public class Biblioteca {
         System.out.print("Introduce el usuario que ha alquilado el libro: ");
         String usuario = sc.nextLine();
         int index = 0;
-        int indexDos = 1;
-        for (Libro l : libros) {
-            if (l.getUsuario().trim().equalsIgnoreCase(usuario.trim())) {
-                System.out.print("Libro alquilado por " + usuario + ", número " + index + ": " + l.toString());
-                indexDos++;
+        int indexAlquilado = 1;
+        int indexUsuario = 0;
+        for (Empleado e : empleados) {
+            if (usuarios.contains(usuario)) {
+                indexUsuario++;
             }
-            index++;
         }
-        if (indexDos == 1) {
-            System.out.println(usuario + " no tiene libros alquilados en estos momentos");
+        if (indexUsuario == 1) {
+            for (Libro l : libros) {
+                if (l.getUsuario().trim().equalsIgnoreCase(usuario.trim())) {
+                    System.out.print("Libro alquilado por " + usuario + ", número " + index + ": " + l.toString());
+                    indexAlquilado++;
+                }
+                index++;
+            }
+            if (indexAlquilado == 1) {
+                System.out.println(usuario + " no tiene libros alquilados en estos momentos");
+            }
+        } else {
+            System.out.println("No existe ese usuario");
         }
     }
 
@@ -388,7 +413,7 @@ public class Biblioteca {
             if (l.getTitulo().trim().equalsIgnoreCase(titulo.trim())) {
                 String respuesta;
                 do {
-                    System.out.println("Quieres eliminar el libro " + l.toString() + "? (s/n): ");
+                    System.out.print("Quieres eliminar el libro " + l.toString() + "? (s/n): ");
                     respuesta = sc.nextLine();
                     if (respuesta.equalsIgnoreCase("n")) {
                         System.out.println("No se eliminara el libro de la biblioteca");
@@ -472,14 +497,14 @@ public class Biblioteca {
     }
 
     public static void mostrarUsuarios() {
-        System.out.println("LISTADO DE USUARiOS");
+        System.out.println("LISTADO DE USUARiOS:");
         for (Usuario u : usuarios) {
             System.out.println(u.toString());
         }
     }
 
     public static void mostrarBibliotecarios() {
-        System.out.println("LISTADO DE BiBLiOTECARiOS");
+        System.out.println("LISTADO DE BiBLiOTECARiOS:");
         for (Empleado u : empleados) {
             System.out.println(u.toString());
         }
@@ -534,7 +559,7 @@ public class Biblioteca {
     public static int menuGestionEmpleados() {
         int opcion;
         try {
-            System.out.print("\nGESTIÓN DE EMPLEADOS DE LA BIBLIOTECA"
+            System.out.print("\nGESTIÓN DE EMPLEADOS DE LA BIBLIOTECA:"
                     + "\n(1) Listar empleados"
                     + "\n(2) Dar de alta un nuevo empleado"
                     + "\n(3) Dar de baja un empleado existente"
@@ -580,7 +605,7 @@ public class Biblioteca {
     public static int menuGestionUsuarios() {
         int opcion;
         try {
-            System.out.print("\nGESTIÓN DE USUARIOS DE LA BIBLIOTECA"
+            System.out.print("\nGESTIÓN DE USUARIOS DE LA BIBLIOTECA:"
                     + "\n(1) Listar usuarios"
                     + "\n(2) Dar de alta un nuevo usuario"
                     + "\n(3) Dar de baja un usuario existente"

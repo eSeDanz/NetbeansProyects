@@ -129,12 +129,12 @@ public class Biblioteca {
                 fis.close();
             } else {
                 System.out.println("Imposible recuperar datos, es la primera ejecución del programa");
-                System.out.println("Continuaremos con los valores por defecto de usuarios y empleados, y tendras que crear nuevos libros...");
+                System.out.println("Continuaremos con los valores por defecto de usuarios, empleados y libros...");
                 defaultValues();
             }
         } else {
             System.out.println("Te has equivocado al introducir la respuesta, no se recuperará la sesión anterior");
-            System.out.println("Continuaremos con los valores por defecto de usuarios y empleados, y tendras que crear nuevos libros...");
+            System.out.println("Continuaremos con los valores por defecto de usuarios, empleados y libros...");
             defaultValues();
         }
     }

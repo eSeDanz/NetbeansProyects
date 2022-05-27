@@ -26,7 +26,7 @@ public class Biblioteca {
     private static final String RUTA = "C:\\Users\\Dani\\Rogelio\\NetbeansProyects\\Biblioteca\\src\\biblioteca\\Serializado.bin";
     private static DecimalFormat formato = new DecimalFormat("###0.##");
 
-    public static void main(String[] args) throws IOException, FileNotFoundException, ClassNotFoundException {
+    public static void main(String[] args) {
         recuperarDatos();
         int opcion;
         do {
@@ -49,10 +49,10 @@ public class Biblioteca {
                     devolucionLibro();
                     break;
                 case 6:
-
+                    switchGestionEmpleados();
                     break;
                 case 7:
-
+                    switchGestionUsuarios();
                     break;
                 case 10:
                     System.out.println("Gracias por utilizar nuestro software");
@@ -80,14 +80,26 @@ public class Biblioteca {
         libros.add(new Libro("El mito de Sísifo", "Albert Camus", "Hamish Hamilton", 3, "XSJUSHE", 20.20));
     }
 
-    public static void serializar(ArrayList<Empleado> empleados, ArrayList<Usuario> usuarios, ArrayList<Libro> libros) throws FileNotFoundException, IOException {
-        File fichero = new File(RUTA);
-        String respuesta;
-        if (fichero.exists()) {
-            System.out.print("Quieres guardar la sesión actual? s/n: ");
-            respuesta = sc.nextLine();
-            if (respuesta.equalsIgnoreCase("s")) {
-                System.out.println("Se guardarán los cambios introducidos en la sesión actual");
+    public static void serializar(ArrayList<Empleado> empleados, ArrayList<Usuario> usuarios, ArrayList<Libro> libros) {
+        try {
+            File fichero = new File(RUTA);
+            String respuesta;
+            if (fichero.exists()) {
+                System.out.print("Quieres guardar la sesión actual? s/n: ");
+                respuesta = sc.nextLine();
+                if (respuesta.equalsIgnoreCase("s")) {
+                    System.out.println("Se guardarán los cambios introducidos en la sesión actual");
+                    FileOutputStream fos = new FileOutputStream(RUTA);
+                    ObjectOutputStream oos = new ObjectOutputStream(fos);
+                    oos.writeObject(empleados);
+                    oos.writeObject(usuarios);
+                    oos.writeObject(libros);
+                    oos.close();
+                    fos.close();
+                } else {
+                    System.out.println("No se guardaran los cambios de la sesión actual");
+                }
+            } else {
                 FileOutputStream fos = new FileOutputStream(RUTA);
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
                 oos.writeObject(empleados);
@@ -95,47 +107,49 @@ public class Biblioteca {
                 oos.writeObject(libros);
                 oos.close();
                 fos.close();
-            } else {
-                System.out.println("No se guardaran los cambios de la sesión actual");
             }
-        } else {
-            FileOutputStream fos = new FileOutputStream(RUTA);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(empleados);
-            oos.writeObject(usuarios);
-            oos.writeObject(libros);
-            oos.close();
-            fos.close();
+        } catch (FileNotFoundException fnfe) {
+            System.out.println("Archivo no encontrado");
+        } catch (IOException ioe) {
+            System.out.println("Error en la entrada/salida de datos");
         }
     }
 
-    public static void recuperarDatos() throws FileNotFoundException, IOException, ClassNotFoundException {
-        File fichero = new File(RUTA);
-        boolean fin = false;
-        String respuesta;
-        System.out.print("Quieres recuperar la sesión anterior? s/n: ");
-        respuesta = sc.nextLine();
-        if (respuesta.equalsIgnoreCase("n")) {
-            System.out.println("Continuaremos con los valores por defecto de usuarios, empleados y libros...");
-            defaultValues();
-        } else if (respuesta.equalsIgnoreCase("s")) {
-            if (fichero.exists()) {
-                FileInputStream fis = new FileInputStream(RUTA);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                empleados = (ArrayList<Empleado>) ois.readObject();
-                usuarios = (ArrayList<Usuario>) ois.readObject();
-                libros = (ArrayList<Libro>) ois.readObject();
-                ois.close();
-                fis.close();
+    public static void recuperarDatos(){
+        try {
+            File fichero = new File(RUTA);
+            boolean fin = false;
+            String respuesta;
+            System.out.print("Quieres recuperar la sesión anterior? s/n: ");
+            respuesta = sc.nextLine();
+            if (respuesta.equalsIgnoreCase("n")) {
+                System.out.println("Continuaremos con los valores por defecto de usuarios, empleados y libros...");
+                defaultValues();
+            } else if (respuesta.equalsIgnoreCase("s")) {
+                if (fichero.exists()) {
+                    FileInputStream fis = new FileInputStream(RUTA);
+                    ObjectInputStream ois = new ObjectInputStream(fis);
+                    empleados = (ArrayList<Empleado>) ois.readObject();
+                    usuarios = (ArrayList<Usuario>) ois.readObject();
+                    libros = (ArrayList<Libro>) ois.readObject();
+                    ois.close();
+                    fis.close();
+                } else {
+                    System.out.println("Imposible recuperar datos, es la primera ejecución del programa");
+                    System.out.println("Continuaremos con los valores por defecto de usuarios, empleados y libros...");
+                    defaultValues();
+                }
             } else {
-                System.out.println("Imposible recuperar datos, es la primera ejecución del programa");
+                System.out.println("Te has equivocado al introducir la respuesta, no se recuperará la sesión anterior");
                 System.out.println("Continuaremos con los valores por defecto de usuarios, empleados y libros...");
                 defaultValues();
             }
-        } else {
-            System.out.println("Te has equivocado al introducir la respuesta, no se recuperará la sesión anterior");
-            System.out.println("Continuaremos con los valores por defecto de usuarios, empleados y libros...");
-            defaultValues();
+        } catch (FileNotFoundException fnfe) {
+            System.out.println("Archivo no encontrado");
+        } catch (IOException ioe) {
+            System.out.println("Error en la entrada/salida de datos");
+        } catch (ClassNotFoundException cnfe) {
+            System.out.println("Clase no encontrada");
         }
     }
 
@@ -626,14 +640,14 @@ public class Biblioteca {
         mostrarBibliotecarios();
         System.out.print("\nIntroduce el nombre del bibliotecario a eliminar: ");
         String bibliotecario = sc.nextLine();
-        int index=0;
+        int index = 0;
         for (Empleado e : empleados) {
             if (e.getNombre().trim().equalsIgnoreCase(bibliotecario.trim())) {
                 System.out.println("Empleado " + e.getNombre() + " eliminado con éxito");
                 empleados.remove(e);
                 index++;
             }
-            if(index==0){
+            if (index == 0) {
                 System.out.println("Ningún empleado ha sido eliminado, te has equivocado al escribir el nombre");
             }
         }
@@ -656,14 +670,14 @@ public class Biblioteca {
         mostrarUsuarios();
         System.out.print("\nIntroduce el nombre del usuario a eliminar: ");
         String usuario = sc.nextLine();
-        int index=0;
+        int index = 0;
         for (Usuario u : usuarios) {
             if (u.getNombre().trim().equalsIgnoreCase(usuario.trim())) {
                 System.out.println("Usuario " + u.getNombre() + " eliminado con éxito");
                 usuarios.remove(u);
                 index++;
             }
-            if(index==0){
+            if (index == 0) {
                 System.out.println("Ningún usuario ha sido eliminado, te has equivocado al escribir el nombre");
             }
         }

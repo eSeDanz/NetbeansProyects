@@ -83,9 +83,8 @@ public class Libro implements Serializable {
     public String toString() {
         String prestado = "";
         if (isPrestado()) {
-            prestado += "Este libro ha sido prestado por el bibliotecario " + getBibliotecario() + " al usuario" + getUsuario();
+            prestado += "(Este libro ha sido prestado por el bibliotecario " + getBibliotecario() + " al usuario " + getUsuario()+")";
         }
-        return "Titulo= " + titulo + ", autor= " + autor + ", editorial= " + editorial + ", numPasillo= " + numPasillo + ", ISBN= " + ISBN + ", precio= " + precio
-                + "\n" + prestado;
+        return "Titulo= " + titulo + ", autor= " + autor + ", editorial= " + editorial + ", numPasillo= " + numPasillo + ", ISBN= " + ISBN + ", precio= " + precio + " " + prestado;
     }
 }

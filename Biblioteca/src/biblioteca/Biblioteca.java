@@ -430,13 +430,13 @@ public class Biblioteca {
 
     public static void alquilerLibro() {
         mostrarNoPrestados();
-        System.out.print("Introduce el título del libro que quieres alquilar: ");
+        System.out.print("\nIntroduce el título del libro que quieres alquilar: ");
         String titulo = sc.nextLine();
         for (Libro l : libros) {
             if (l.getTitulo().trim().equalsIgnoreCase(titulo.trim())) {
                 String respuesta;
                 do {
-                    System.out.println("Quieres alquilar el libro " + l.toString() + "? (s/n): ");
+                    System.out.print("Quieres alquilar el libro " + l.toString() + "? (s/n): ");
                     respuesta = sc.nextLine();
                     if (respuesta.equalsIgnoreCase("n")) {
                         System.out.println("No se alquilará el libro de la biblioteca");
@@ -472,7 +472,7 @@ public class Biblioteca {
 
     public static void devolucionLibro() {
         mostrarPrestados();
-        System.out.print("Introduce el título del libro que quieres devolver: ");
+        System.out.print("\nIntroduce el título del libro que quieres devolver: ");
         String titulo = sc.nextLine();
         for (Libro l : libros) {
             if (l.getTitulo().trim().equalsIgnoreCase(titulo.trim()) && l.isPrestado()) {
@@ -497,26 +497,36 @@ public class Biblioteca {
     }
 
     public static void mostrarUsuarios() {
-        System.out.println("LISTADO DE USUARiOS:");
+        System.out.println("LiSTADO DE USUARiOS:");
         for (Usuario u : usuarios) {
             System.out.println(u.toString());
         }
     }
 
     public static void mostrarBibliotecarios() {
-        System.out.println("LISTADO DE BiBLiOTECARiOS:");
+        System.out.println("LiSTADO DE BiBLiOTECARiOS:");
         for (Empleado u : empleados) {
             System.out.println(u.toString());
         }
     }
 
+    public static void mostrarLibros() {
+        System.out.println("\nLiSTADO DE LiBROS:");
+        int index = 0;
+        for (Libro l : libros) {
+            System.out.println("Libro " + index + ": " + l.toString());
+            index++;
+        }
+    }
+
     public static void mostrarPrestados() {
-        System.out.println("MOSTRANDO LOS LIBROS ALQUILADOS:");
+        mostrarLibros();
+        System.out.println("MOSTRANDO LOS LiBROS ALQUiLADOS:");
         int index = 0;
         int indexDos = 1;
         for (Libro l : libros) {
             if (l.isPrestado()) {
-                System.out.print("Libro alquilado " + index + ": " + l.toString());
+                System.out.println("Libro alquilado " + index + ": " + l.toString());
                 indexDos++;
             }
             index++;
@@ -527,11 +537,12 @@ public class Biblioteca {
     }
 
     public static void mostrarNoPrestados() {
-        System.out.println("\nMOSTRANDO LOS LIBROS SiN ALQUiLAR:");
+        mostrarLibros();
+        System.out.println("\nMOSTRANDO LOS LiBROS SiN ALQUiLAR:");
         int index = 0;
         for (Libro l : libros) {
             if (!l.isPrestado()) {
-                System.out.print("Libro sin alquilar " + index + ": " + l.toString());
+                System.out.println("Libro sin alquilar " + index + ": " + l.toString());
             }
             index++;
         }
@@ -559,7 +570,7 @@ public class Biblioteca {
     public static int menuGestionEmpleados() {
         int opcion;
         try {
-            System.out.print("\nGESTIÓN DE EMPLEADOS DE LA BIBLIOTECA:"
+            System.out.print("\nGESTiÓN DE EMPLEADOS DE LA BiBLiOTECA:"
                     + "\n(1) Listar empleados"
                     + "\n(2) Dar de alta un nuevo empleado"
                     + "\n(3) Dar de baja un empleado existente"
@@ -605,7 +616,7 @@ public class Biblioteca {
     public static int menuGestionUsuarios() {
         int opcion;
         try {
-            System.out.print("\nGESTIÓN DE USUARIOS DE LA BIBLIOTECA:"
+            System.out.print("\nGESTiÓN DE USUARiOS DE LA BiBLiOTECA:"
                     + "\n(1) Listar usuarios"
                     + "\n(2) Dar de alta un nuevo usuario"
                     + "\n(3) Dar de baja un usuario existente"

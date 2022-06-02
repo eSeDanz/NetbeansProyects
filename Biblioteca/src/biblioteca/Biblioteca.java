@@ -24,39 +24,42 @@ public class Biblioteca {
     private static ArrayList<Empleado> empleados = new ArrayList<>();
     private static ArrayList<Usuario> usuarios = new ArrayList<>();
     private static ArrayList<Libro> libros = new ArrayList<>();
-    private static final String RUTA = "C:\\Users\\Dani\\Rogelio\\NetbeansProyects\\Biblioteca\\src\\biblioteca\\Serializado.bin";
+    private static final String RUTA = "C:\\Users\\Dani\\Java\\NetbeansProyects\\Biblioteca\\src\\biblioteca\\Serializado.bin";
     private static DecimalFormat formato = new DecimalFormat("###0.##");
 
-    public static void main(String[] args) throws ConcurrentModificationException {
+    public static void main(String[] args) {
         recuperarDatos();
         int opcion;
         do {
             opcion = menuPrincipal();
             switch (opcion) {
                 case 1:
-                    altaLibro();
+                    mostrarLibros();
                     break;
                 case 2:
-                    switchBusqueda();
+                    altaLibro();
                     break;
                 case 3:
                     switchBusqueda();
-                    bajaLibro();
                     break;
                 case 4:
-                    alquilerLibro();
+                    switchBusqueda();
+                    bajaLibro();
                     break;
                 case 5:
-                    devolucionLibro();
+                    alquilerLibro();
                     break;
                 case 6:
-                    switchGestionEmpleados();
+                    devolucionLibro();
                     break;
                 case 7:
+                    switchGestionEmpleados();
+                    break;
+                case 8:
                     switchGestionUsuarios();
                     break;
                 case 10:
-                    System.out.println("Gracias por utilizar nuestro software");
+                    System.out.println("\nGracias por utilizar nuestro software");
                     break;
                 default:
                     System.out.println("Te has equivocado de número...");
@@ -87,20 +90,24 @@ public class Biblioteca {
             File fichero = new File(RUTA);
             String respuesta;
             if (fichero.exists()) {
-                System.out.print("Quieres guardar la sesión actual? s/n: ");
-                respuesta = sc.nextLine();
-                if (respuesta.equalsIgnoreCase("s")) {
-                    System.out.println("Se guardarán los cambios introducidos en la sesión actual");
-                    FileOutputStream fos = new FileOutputStream(RUTA);
-                    ObjectOutputStream oos = new ObjectOutputStream(fos);
-                    oos.writeObject(empleados);
-                    oos.writeObject(usuarios);
-                    oos.writeObject(libros);
-                    oos.close();
-                    fos.close();
-                } else {
-                    System.out.println("No se guardaran los cambios de la sesión actual");
-                }
+                do {
+                    System.out.print("Quieres guardar la sesión actual? s/n: ");
+                    respuesta = sc.nextLine();
+                    if (respuesta.equalsIgnoreCase("s")) {
+                        System.out.println("Se guardarán los cambios introducidos en la sesión actual");
+                        FileOutputStream fos = new FileOutputStream(RUTA);
+                        ObjectOutputStream oos = new ObjectOutputStream(fos);
+                        oos.writeObject(empleados);
+                        oos.writeObject(usuarios);
+                        oos.writeObject(libros);
+                        oos.close();
+                        fos.close();
+                    } else if (respuesta.equalsIgnoreCase("n")) {
+                        System.out.println("No se guardaran los cambios de la sesión actual");
+                    } else {
+                        System.out.println("Te has equivocado de respuesta");
+                    }
+                } while (!(respuesta.equalsIgnoreCase("s") || respuesta.equalsIgnoreCase("n")));
             } else {
                 FileOutputStream fos = new FileOutputStream(RUTA);
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -159,13 +166,14 @@ public class Biblioteca {
         int opcion;
         try {
             System.out.print("\nMENÚ PRINCIPAL: "
-                    + "\n(1) Dar de alta un libro en el sistema"
-                    + "\n(2) Busqueda de libros en el sistema"
-                    + "\n(3) Dar de baja un libro en el sistema"
-                    + "\n(4) Alquiler de un libro por un usuario"
-                    + "\n(5) Devolucion de un libro por un usuario"
-                    + "\n(6) Gestion de empleados de la biblioteca"
-                    + "\n(7) Gestion de usuarios de la biblioteca"
+                    + "\n(1) Mostrar libros en el sistema"
+                    + "\n(2) Dar de alta un libro en el sistema"
+                    + "\n(3) Busqueda de libros en el sistema"
+                    + "\n(4) Dar de baja un libro en el sistema"
+                    + "\n(5) Alquiler de un libro por un usuario"
+                    + "\n(6) Devolucion de un libro por un usuario"
+                    + "\n(7) Gestion de empleados de la biblioteca"
+                    + "\n(8) Gestion de usuarios de la biblioteca"
                     + "\n(10) Salir del sistema"
                     + "\nIntroduce una opción del menú: ");
             opcion = sc.nextInt();
@@ -193,19 +201,30 @@ public class Biblioteca {
             autor = sc.nextLine();
             System.out.print("Introduce la editorial del libro: ");
             editorial = sc.nextLine();
-            System.out.print("Introduce el pasillo donde va a estar el libro: ");
-            numPasillo = sc.nextInt();
-            sc.nextLine();
+            do {
+                System.out.print("Introduce el pasillo donde va a estar el libro: ");
+                numPasillo = sc.nextInt();
+                sc.nextLine();
+                if (numPasillo < 0) {
+                    System.out.println("El pasillo tiene que ser 0 o superior");
+                }
+            } while (numPasillo < 0);
             System.out.print("Introduce el ISBN: ");
             ISBN = sc.nextLine();
-            System.out.print("Introduce el precio del libro: ");
-            precio = sc.nextDouble();
-            sc.nextLine();
+            do {
+                System.out.print("Introduce el precio del libro: ");
+                precio = sc.nextDouble();
+                sc.nextLine();
+                if (precio <= 0) {
+                    System.out.println("El libro tiene que tener un precio mayor a 0");
+                }
+            } while (precio <= 0);
             Libro l = new Libro(titulo, autor, editorial, numPasillo, ISBN, precio);
             libros.add(l);
             System.out.println("Libro añadido con éxito");
         } catch (InputMismatchException ime) {
             System.out.println("Error en el tipo de datos introducidos");
+            sc.nextLine();
         }
     }
 
@@ -282,7 +301,7 @@ public class Biblioteca {
         int index = 0;
         for (Libro l : libros) {
             if (l.getTitulo().trim().equalsIgnoreCase(titulo.trim())) {
-                System.out.print("Libro " + index + ": " + l.toString());
+                System.out.println("Libro " + index + ": " + l.toString());
             }
             index++;
         }
@@ -294,7 +313,7 @@ public class Biblioteca {
         int index = 0;
         for (Libro l : libros) {
             if (l.getAutor().trim().equalsIgnoreCase(autor.trim())) {
-                System.out.print("Libro " + index + ": " + l.toString());
+                System.out.println("Libro " + index + ": " + l.toString());
             }
             index++;
         }
@@ -306,7 +325,7 @@ public class Biblioteca {
         int index = 0;
         for (Libro l : libros) {
             if (l.getEditorial().trim().equalsIgnoreCase(editorial.trim())) {
-                System.out.print("Libro " + index + ": " + l.toString());
+                System.out.println("Libro " + index + ": " + l.toString());
             }
             index++;
         }
@@ -319,7 +338,7 @@ public class Biblioteca {
         int index = 0;
         for (Libro l : libros) {
             if (l.getNumPasillo() == numPasillo) {
-                System.out.print("Libro " + index + ": " + l.toString());
+                System.out.println("Libro " + index + ": " + l.toString());
             }
             index++;
         }
@@ -331,7 +350,7 @@ public class Biblioteca {
         int index = 0;
         for (Libro l : libros) {
             if (l.getISBN().trim().equalsIgnoreCase(ISBN.trim())) {
-                System.out.print("Libro " + index + ": " + l.toString());
+                System.out.println("Libro " + index + ": " + l.toString());
             }
             index++;
         }
@@ -344,14 +363,14 @@ public class Biblioteca {
         int indexAlquilado = 1;
         int indexEmpleado = 0;
         for (Empleado e : empleados) {
-            if (empleados.contains(bibliotecario)) {
+            if (e.getNombre().trim().equalsIgnoreCase(bibliotecario.trim())) {
                 indexEmpleado++;
             }
         }
         if (indexEmpleado == 1) {
             for (Libro l : libros) {
                 if (l.getBibliotecario().trim().equalsIgnoreCase(bibliotecario.trim())) {
-                    System.out.print("Libro prestado por " + bibliotecario + ", número " + index + ": " + l.toString());
+                    System.out.println("Libro prestado por " + bibliotecario + ", número " + index + ": " + l.toString());
                     indexAlquilado++;
                 }
                 index++;
@@ -359,7 +378,7 @@ public class Biblioteca {
             if (indexAlquilado == 1) {
                 System.out.println(bibliotecario + " no tiene libros prestados en estos momentos");
             }
-        } else {
+        } else if (indexEmpleado == 0) {
             System.out.println("No existe ese empleado");
         }
     }
@@ -386,14 +405,14 @@ public class Biblioteca {
         int indexAlquilado = 1;
         int indexUsuario = 0;
         for (Empleado e : empleados) {
-            if (usuarios.contains(usuario)) {
+            if (e.getNombre().trim().equalsIgnoreCase(usuario.trim())) {
                 indexUsuario++;
             }
         }
         if (indexUsuario == 1) {
             for (Libro l : libros) {
                 if (l.getUsuario().trim().equalsIgnoreCase(usuario.trim())) {
-                    System.out.print("Libro alquilado por " + usuario + ", número " + index + ": " + l.toString());
+                    System.out.println("Libro alquilado por " + usuario + ", número " + index + ": " + l.toString());
                     indexAlquilado++;
                 }
                 index++;
@@ -407,10 +426,13 @@ public class Biblioteca {
     }
 
     public static void bajaLibro() {
-        System.out.print("Introduce el título del libro que quieres eliminar: ");
-        String titulo = sc.nextLine();
+        String titulo;
+        int index = 0;
+        System.out.print("\nIntroduce el título del libro que quieres eliminar: ");
+        titulo = sc.nextLine();
         for (Libro l : libros) {
             if (l.getTitulo().trim().equalsIgnoreCase(titulo.trim())) {
+                index++;
                 String respuesta;
                 do {
                     System.out.print("Quieres eliminar el libro " + l.toString() + "? (s/n): ");
@@ -420,10 +442,13 @@ public class Biblioteca {
                     } else if (respuesta.equalsIgnoreCase("s")) {
                         libros.remove(l);
                         System.out.println("Libro eliminado con éxito");
+                        return;
                     } else {
                         System.out.println("Te has equivocado de respuesta...");
                     }
                 } while (!(respuesta.equalsIgnoreCase("s") || respuesta.equalsIgnoreCase("n")));
+            } else if (index == 0) {
+                System.out.println("Ningún libro coincide con el título que has introducido");
             }
         }
     }
@@ -497,14 +522,14 @@ public class Biblioteca {
     }
 
     public static void mostrarUsuarios() {
-        System.out.println("LiSTADO DE USUARiOS:");
+        System.out.println("\nLiSTADO DE USUARiOS:");
         for (Usuario u : usuarios) {
             System.out.println(u.toString());
         }
     }
 
     public static void mostrarBibliotecarios() {
-        System.out.println("LiSTADO DE BiBLiOTECARiOS:");
+        System.out.println("\nLiSTADO DE BiBLiOTECARiOS:");
         for (Empleado u : empleados) {
             System.out.println(u.toString());
         }
@@ -521,7 +546,7 @@ public class Biblioteca {
 
     public static void mostrarPrestados() {
         mostrarLibros();
-        System.out.println("MOSTRANDO LOS LiBROS ALQUiLADOS:");
+        System.out.println("\nMOSTRANDO LOS LiBROS ALQUiLADOS:");
         int index = 0;
         int indexDos = 1;
         for (Libro l : libros) {
@@ -682,6 +707,7 @@ public class Biblioteca {
                 System.out.println("Empleado " + e.getNombre() + " eliminado con éxito");
                 empleados.remove(e);
                 index++;
+                return;
             }
             if (index == 0) {
                 System.out.println("Ningún empleado ha sido eliminado, te has equivocado al escribir el nombre");
@@ -712,6 +738,7 @@ public class Biblioteca {
                 System.out.println("Usuario " + u.getNombre() + " eliminado con éxito");
                 usuarios.remove(u);
                 index++;
+                return;
             }
             if (index == 0) {
                 System.out.println("Ningún usuario ha sido eliminado, te has equivocado al escribir el nombre");

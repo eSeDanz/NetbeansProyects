@@ -24,7 +24,7 @@ public class Biblioteca {
     private static ArrayList<Empleado> empleados = new ArrayList<>();
     private static ArrayList<Usuario> usuarios = new ArrayList<>();
     private static ArrayList<Libro> libros = new ArrayList<>();
-    private static final String RUTA = "C:\\Users\\Dani\\Java\\NetbeansProyects\\Biblioteca\\src\\biblioteca\\Serializado.bin";
+    private static final String RUTA = "/home/alumno/NetBeansProjects/Biblioteca/src/biblioteca/Serializado.bin";
     private static DecimalFormat formato = new DecimalFormat("###0.##");
 
     public static void main(String[] args) {
@@ -369,9 +369,11 @@ public class Biblioteca {
         }
         if (indexEmpleado == 1) {
             for (Libro l : libros) {
-                if (l.getBibliotecario().trim().equalsIgnoreCase(bibliotecario.trim())) {
-                    System.out.println("Libro prestado por " + bibliotecario + ", número " + index + ": " + l.toString());
-                    indexAlquilado++;
+                if (!(l.getBibliotecario() == null)) {
+                    if (l.getBibliotecario().trim().equalsIgnoreCase(bibliotecario.trim())) {
+                        System.out.println("Libro prestado por " + bibliotecario + ", número " + index + ": " + l.toString());
+                        indexAlquilado++;
+                    }
                 }
                 index++;
             }
@@ -404,23 +406,25 @@ public class Biblioteca {
         int index = 0;
         int indexAlquilado = 1;
         int indexUsuario = 0;
-        for (Empleado e : empleados) {
-            if (e.getNombre().trim().equalsIgnoreCase(usuario.trim())) {
+        for (Usuario u : usuarios) {
+            if (u.getNombre().trim().equalsIgnoreCase(usuario.trim())) {
                 indexUsuario++;
             }
         }
         if (indexUsuario == 1) {
             for (Libro l : libros) {
-                if (l.getUsuario().trim().equalsIgnoreCase(usuario.trim())) {
-                    System.out.println("Libro alquilado por " + usuario + ", número " + index + ": " + l.toString());
-                    indexAlquilado++;
+                if (!(l.getUsuario() == null)) {
+                    if (l.getUsuario().trim().equalsIgnoreCase(usuario.trim())) {
+                        System.out.println("Libro alquilado por " + usuario + ", número " + index + ": " + l.toString());
+                        indexAlquilado++;
+                    }
                 }
                 index++;
             }
             if (indexAlquilado == 1) {
                 System.out.println(usuario + " no tiene libros alquilados en estos momentos");
             }
-        } else {
+        } else if (indexUsuario == 0) {
             System.out.println("No existe ese usuario");
         }
     }
@@ -447,9 +451,10 @@ public class Biblioteca {
                         System.out.println("Te has equivocado de respuesta...");
                     }
                 } while (!(respuesta.equalsIgnoreCase("s") || respuesta.equalsIgnoreCase("n")));
-            } else if (index == 0) {
-                System.out.println("Ningún libro coincide con el título que has introducido");
             }
+        }
+        if (index == 0) {
+            System.out.println("Ningún libro coincide con el título que has introducido");
         }
     }
 
@@ -511,6 +516,7 @@ public class Biblioteca {
                         l.setUsuario("");
                         l.setBibliotecario("");
                         l.setPrestado(false);
+                        System.out.println("Devolución realizada con éxito");
                     } else {
                         System.out.println("Te has equivocado de respuesta");
                     }
@@ -599,7 +605,8 @@ public class Biblioteca {
                     + "\n(1) Listar empleados"
                     + "\n(2) Dar de alta un nuevo empleado"
                     + "\n(3) Dar de baja un empleado existente"
-                    + "\n(4) Salir del menú de gestión de empleados");
+                    + "\n(4) Salir del menú de gestión de empleados"
+                    + "\nIntroduce una opción del menú: ");
             opcion = sc.nextInt();
             sc.nextLine();
             return opcion;
@@ -645,7 +652,8 @@ public class Biblioteca {
                     + "\n(1) Listar usuarios"
                     + "\n(2) Dar de alta un nuevo usuario"
                     + "\n(3) Dar de baja un usuario existente"
-                    + "\n(4) Salir del menú de gestión de usuarios");
+                    + "\n(4) Salir del menú de gestión de usuarios"
+                    + "\nIntroduce una opción del menú: ");
             opcion = sc.nextInt();
             sc.nextLine();
             return opcion;
@@ -692,7 +700,9 @@ public class Biblioteca {
             if (e.getNombre().trim().equalsIgnoreCase(empleado.trim())) {
                 System.out.println("Ya existe un empleado con ese nombre, intenta con otro diferente");
             } else {
-                empleados.add(e);
+                empleados.add(new Empleado(empleado));
+                System.out.println("Empleado añadido con éxito");
+                return;
             }
         }
     }
@@ -709,9 +719,9 @@ public class Biblioteca {
                 index++;
                 return;
             }
-            if (index == 0) {
-                System.out.println("Ningún empleado ha sido eliminado, te has equivocado al escribir el nombre");
-            }
+        }
+        if (index == 0) {
+            System.out.println("Ningún empleado ha sido eliminado, te has equivocado al escribir el nombre");
         }
     }
 
@@ -723,7 +733,9 @@ public class Biblioteca {
             if (u.getNombre().trim().equalsIgnoreCase(usuario.trim())) {
                 System.out.println("Ya existe un usuario con ese nombre, prueba con otro distinto");
             } else {
-                usuarios.add(u);
+                usuarios.add(new Usuario(usuario));
+                System.out.println("Usuario añadido con éxito");
+                return;
             }
         }
     }
@@ -740,9 +752,9 @@ public class Biblioteca {
                 index++;
                 return;
             }
-            if (index == 0) {
-                System.out.println("Ningún usuario ha sido eliminado, te has equivocado al escribir el nombre");
-            }
+        }
+        if (index == 0) {
+            System.out.println("Ningún usuario ha sido eliminado, te has equivocado al escribir el nombre");
         }
     }
 }

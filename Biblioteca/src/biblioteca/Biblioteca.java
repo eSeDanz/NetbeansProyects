@@ -165,7 +165,7 @@ public class Biblioteca {
     public static int menuPrincipal() {
         int opcion;
         try {
-            System.out.print("\nMENÚ PRINCIPAL: "
+            System.out.print("\nMENÚ PRiNCiPAL: "
                     + "\n(1) Mostrar libros en el sistema"
                     + "\n(2) Dar de alta un libro en el sistema"
                     + "\n(3) Busqueda de libros en el sistema"
@@ -194,7 +194,7 @@ public class Biblioteca {
         String ISBN;
         double precio;
         try {
-            System.out.println("\nDAR DE ALTA UN LIBRO:");
+            System.out.println("\nDAR DE ALTA UN LiBRO:");
             System.out.print("Introduce el título del libro: ");
             titulo = sc.nextLine();
             System.out.print("Introduce el autor: ");
@@ -231,7 +231,7 @@ public class Biblioteca {
     public static int menuBusqueda() {
         int opcion;
         try {
-            System.out.print("\nBUSQUEDA DE LIBROS POR CATEGORÍA:"
+            System.out.print("\nBUSQUEDA DE LiBROS POR CATEGORÍA:"
                     + "\n(1) Título"
                     + "\n(2) Autor"
                     + "\n(3) Editorial"
@@ -462,40 +462,47 @@ public class Biblioteca {
         mostrarNoPrestados();
         System.out.print("\nIntroduce el título del libro que quieres alquilar: ");
         String titulo = sc.nextLine();
-        for (Libro l : libros) {
-            if (l.getTitulo().trim().equalsIgnoreCase(titulo.trim())) {
-                String respuesta;
-                do {
-                    System.out.print("Quieres alquilar el libro " + l.toString() + "? (s/n): ");
-                    respuesta = sc.nextLine();
-                    if (respuesta.equalsIgnoreCase("n")) {
-                        System.out.println("No se alquilará el libro de la biblioteca");
-                    } else if (respuesta.equalsIgnoreCase("s")) {
-                        mostrarUsuarios();
-                        System.out.print("Introduce el usuario que va a alquilar el libro: ");
-                        String usuario = sc.nextLine();
-                        if (existeUsuario(usuario)) {
-                            l.setUsuario(usuario);
+        if (!(existeLibro(titulo))) {
+            System.out.println("El titulo introducido no se encuentra en la biblioteca");
+        } else {
+            for (Libro l : libros) {
+                if (l.getTitulo().trim().equalsIgnoreCase(titulo.trim()) && !(l.isPrestado())) {
+                    String respuesta;
+                    do {
+                        System.out.print("Quieres alquilar el libro " + l.toString() + "? (s/n): ");
+                        respuesta = sc.nextLine();
+                        if (respuesta.equalsIgnoreCase("n")) {
+                            System.out.println("No se alquilará el libro de la biblioteca");
+                        } else if (respuesta.equalsIgnoreCase("s")) {
+                            String usuario;
+                            do {
+                                mostrarUsuarios();
+                                System.out.print("Introduce el usuario que va a alquilar el libro: ");
+                                usuario = sc.nextLine();
+                                if (existeUsuario(usuario)) {
+                                    l.setUsuario(usuario);
+                                } else {
+                                    System.out.println("No existe ese usuario");
+                                }
+                            } while (!(existeUsuario(usuario)));
+                            String bibliotecario;
+                            do {
+                                mostrarBibliotecarios();
+                                System.out.print("Introduce el bibliotecario que va a prestar el libro: ");
+                                bibliotecario = sc.nextLine();
+                                if (existeEmpleado(bibliotecario)) {
+                                    l.setBibliotecario(bibliotecario);
+                                    l.setPrestado(true);
+                                    System.out.println("Libro alquilado con éxito");
+                                } else {
+                                    System.out.println("No existe ese empleado");
+                                }
+                            } while (!(existeEmpleado(bibliotecario)));
                         } else {
-                            System.out.println("No existe ese usuario");
-                            System.out.println("No se alquilará el libro");
-                            return;
+                            System.out.println("Te has equivocado de respuesta...");
                         }
-                        mostrarBibliotecarios();
-                        System.out.print("Introduce el bibliotecario que va a prestar el libro: ");
-                        String bibliotecario = sc.nextLine();
-                        if (existeEmpleado(bibliotecario)) {
-                            l.setBibliotecario(bibliotecario);
-                            l.setPrestado(true);
-                            System.out.println("Libro alquilado con éxito");
-                        } else {
-                            System.out.println("No existe ese empleado");
-                            System.out.println("No se alquilara el libro");
-                        }
-                    } else {
-                        System.out.println("Te has equivocado de respuesta...");
-                    }
-                } while (!(respuesta.equalsIgnoreCase("s") || respuesta.equalsIgnoreCase("n")));
+                    } while (!(respuesta.equalsIgnoreCase("s") || respuesta.equalsIgnoreCase("n")));
+                }
             }
         }
     }
@@ -592,6 +599,15 @@ public class Biblioteca {
     public static boolean existeEmpleado(String empleado) {
         for (Empleado e : empleados) {
             if (e.getNombre().trim().equalsIgnoreCase(empleado.trim())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean existeLibro(String empleado) {
+        for (Libro l : libros) {
+            if (l.getTitulo().trim().equalsIgnoreCase(empleado.trim())) {
                 return true;
             }
         }

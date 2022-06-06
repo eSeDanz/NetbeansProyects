@@ -24,7 +24,7 @@ public class Biblioteca {
     private static ArrayList<Empleado> empleados = new ArrayList<>();
     private static ArrayList<Usuario> usuarios = new ArrayList<>();
     private static ArrayList<Libro> libros = new ArrayList<>();
-    private static final String RUTA = "/home/alumno/NetBeansProjects/Biblioteca/src/biblioteca/Serializado.bin";
+    private static final String RUTA = "C:\\Users\\Dani\\Java\\NetbeansProyects\\Biblioteca\\src\\biblioteca\\Serializado.bin";
     private static DecimalFormat formato = new DecimalFormat("###0.##");
 
     public static void main(String[] args) {
@@ -238,8 +238,8 @@ public class Biblioteca {
                     + "\n(4) Ubicacion"
                     + "\n(5) ISBN"
                     + "\n(6) Nombre del bibliotecario que lo ha prestado"
-                    + "\n(7) Estado de prestamos(buscar libros prestados o no prestados)"
-                    + "\n(8) Nombre del usuario que lo ha alquilado"
+                    + "\n(7) Nombre del usuario que lo ha alquilado"
+                    + "\n(8) Estado de prestamos(buscar libros prestados o no prestados)"
                     + "\n(9) Salir"
                     + "\nIntroduce una opción del menú: ");
             opcion = sc.nextInt();
@@ -247,6 +247,7 @@ public class Biblioteca {
             return opcion;
         } catch (InputMismatchException ime) {
             System.out.println("Error en el tipo de datos introducidos");
+            sc.nextLine();
         }
         return 0;
     }
@@ -277,11 +278,11 @@ public class Biblioteca {
                         buscarPorBibliotecario();
                         break;
                     case 7:
-                        buscarPorPrestado();
-                        break;
-                    case 8:
                         mostrarUsuarios();
                         buscarPorUsuario();
+                        break;
+                    case 8:
+                        buscarPorPrestado();
                         break;
                     case 9:
                         System.out.println("Saliendo del menú de busqueda...");
@@ -291,6 +292,7 @@ public class Biblioteca {
                 }
             } catch (InputMismatchException ime) {
                 System.out.println("Error en el tipo de datos introducidos");
+                sc.nextLine();
             }
         } while (op != 9);
     }
@@ -299,11 +301,16 @@ public class Biblioteca {
         System.out.print("\nIntroduce el título del libro que quieres buscar: ");
         String titulo = sc.nextLine();
         int index = 0;
+        int indexEncontrado = 0;
         for (Libro l : libros) {
             if (l.getTitulo().trim().equalsIgnoreCase(titulo.trim())) {
                 System.out.println("Libro " + index + ": " + l.toString());
+                indexEncontrado++;
             }
             index++;
+        }
+        if (indexEncontrado == 0) {
+            System.out.println("Ningún libro encontrado con ese título");
         }
     }
 
@@ -311,11 +318,16 @@ public class Biblioteca {
         System.out.print("\nIntroduce el autor del libro que quieres buscar: ");
         String autor = sc.nextLine();
         int index = 0;
+        int indexEncontrado = 0;
         for (Libro l : libros) {
             if (l.getAutor().trim().equalsIgnoreCase(autor.trim())) {
                 System.out.println("Libro " + index + ": " + l.toString());
+                indexEncontrado++;
             }
             index++;
+        }
+        if (indexEncontrado == 0) {
+            System.out.println("Ningún libro encontrado con ese autor");
         }
     }
 
@@ -323,24 +335,40 @@ public class Biblioteca {
         System.out.print("\nIntroduce la editorial del libro que quieres buscar: ");
         String editorial = sc.nextLine();
         int index = 0;
+        int indexEncontrado = 0;
         for (Libro l : libros) {
             if (l.getEditorial().trim().equalsIgnoreCase(editorial.trim())) {
                 System.out.println("Libro " + index + ": " + l.toString());
+                indexEncontrado++;
             }
             index++;
+        }
+        if (indexEncontrado == 0) {
+            System.out.println("Ningún libro encontrado con esa editorial");
         }
     }
 
     public static void buscarPorUbicacion() {
-        System.out.print("\nIntroduce el pasillo en el que se encuentra el libro: ");
-        int numPasillo = sc.nextInt();
-        sc.nextLine();
+        int numPasillo;
+        do {
+            System.out.print("\nIntroduce el pasillo en el que se encuentra el libro: ");
+            numPasillo = sc.nextInt();
+            sc.nextLine();
+            if (numPasillo < 0) {
+                System.out.println("El pasillo no puede ser menor a 0");
+            }
+        } while (numPasillo < 0);
         int index = 0;
+        int indexEncontrado = 0;
         for (Libro l : libros) {
             if (l.getNumPasillo() == numPasillo) {
                 System.out.println("Libro " + index + ": " + l.toString());
+                indexEncontrado++;
             }
             index++;
+        }
+        if (indexEncontrado == 0) {
+            System.out.println("Ningún libro encontrado con esa editorial");
         }
     }
 
@@ -348,11 +376,16 @@ public class Biblioteca {
         System.out.print("\nIntroduce el ISBN del libro que quieres buscar: ");
         String ISBN = sc.nextLine();
         int index = 0;
+        int indexEncontrado = 0;
         for (Libro l : libros) {
             if (l.getISBN().trim().equalsIgnoreCase(ISBN.trim())) {
                 System.out.println("Libro " + index + ": " + l.toString());
+                indexEncontrado++;
             }
             index++;
+        }
+        if (indexEncontrado == 0) {
+            System.out.println("Ningún libro encontrado con ese ISBN");
         }
     }
 
@@ -401,7 +434,7 @@ public class Biblioteca {
     }
 
     public static void buscarPorUsuario() {
-        System.out.print("Introduce el usuario que ha alquilado el libro: ");
+        System.out.print("\nIntroduce el usuario que ha alquilado el libro: ");
         String usuario = sc.nextLine();
         int index = 0;
         int indexAlquilado = 1;
@@ -511,11 +544,13 @@ public class Biblioteca {
         mostrarPrestados();
         System.out.print("\nIntroduce el título del libro que quieres devolver: ");
         String titulo = sc.nextLine();
+        int index = 0;
         for (Libro l : libros) {
             if (l.getTitulo().trim().equalsIgnoreCase(titulo.trim()) && l.isPrestado()) {
+                index++;
                 String respuesta;
                 do {
-                    System.out.println("Quieres devolver el libro " + l.toString() + "? (s/n): ");
+                    System.out.print("Quieres devolver el libro " + l.toString() + "? (s/n): ");
                     respuesta = sc.nextLine();
                     if (respuesta.equalsIgnoreCase("n")) {
                         System.out.println("No se devolverá el libro a la biblioteca");
@@ -531,6 +566,9 @@ public class Biblioteca {
             } else if (l.getTitulo().trim().equalsIgnoreCase(titulo.trim()) && !(l.isPrestado())) {
                 System.out.println("El libro " + l.toString() + " se encuentra en la biblioteca, no está alquilado");
             }
+        }
+        if (index == 0) {
+            System.out.println("No hay ningún libro con ese título alquilado en estos momentos");
         }
     }
 
@@ -657,6 +695,7 @@ public class Biblioteca {
                 }
             } catch (InputMismatchException ime) {
                 System.out.println("Error en el tipo de datos introducidos");
+                sc.nextLine();
             }
         } while (op != 4);
     }
@@ -704,22 +743,25 @@ public class Biblioteca {
                 }
             } catch (InputMismatchException ime) {
                 System.out.println("Error en el tipo de datos introducidos");
+                sc.nextLine();
             }
         } while (op != 4);
     }
 
     public static void altaEmpleado() {
         mostrarBibliotecarios();
+        int index = 0;
         System.out.print("\nIntroduce el nombre del nuevo bibliotecario: ");
         String empleado = sc.nextLine();
         for (Empleado e : empleados) {
             if (e.getNombre().trim().equalsIgnoreCase(empleado.trim())) {
                 System.out.println("Ya existe un empleado con ese nombre, intenta con otro diferente");
-            } else {
-                empleados.add(new Empleado(empleado));
-                System.out.println("Empleado añadido con éxito");
-                return;
+                index++;
             }
+        }
+        if (index == 0) {
+            empleados.add(new Empleado(empleado));
+            System.out.println("Empleado añadido con éxito");
         }
     }
 
@@ -743,16 +785,18 @@ public class Biblioteca {
 
     public static void altaUsuario() {
         mostrarUsuarios();
+        int index = 0;
         System.out.print("\nIntroduce el nuevo usuario: ");
         String usuario = sc.nextLine();
         for (Usuario u : usuarios) {
             if (u.getNombre().trim().equalsIgnoreCase(usuario.trim())) {
                 System.out.println("Ya existe un usuario con ese nombre, prueba con otro distinto");
-            } else {
-                usuarios.add(new Usuario(usuario));
-                System.out.println("Usuario añadido con éxito");
-                return;
+                index++;
             }
+        }
+        if (index == 0) {
+            usuarios.add(new Usuario(usuario));
+            System.out.println("Usuario añadido con éxito");
         }
     }
 

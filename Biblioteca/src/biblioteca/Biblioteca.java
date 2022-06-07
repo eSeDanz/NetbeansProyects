@@ -24,7 +24,7 @@ public class Biblioteca {
     private static ArrayList<Empleado> empleados = new ArrayList<>();
     private static ArrayList<Usuario> usuarios = new ArrayList<>();
     private static ArrayList<Libro> libros = new ArrayList<>();
-    private static final String RUTA = "C:\\Users\\Dani\\Java\\NetbeansProyects\\Biblioteca\\src\\biblioteca\\Serializado.bin";
+    private static final String RUTA = "/home/alumno/NetBeansProjects/Biblioteca/src/biblioteca/Serializado.bin";
     private static DecimalFormat formato = new DecimalFormat("###0.##");
 
     public static void main(String[] args) {
@@ -368,7 +368,7 @@ public class Biblioteca {
             index++;
         }
         if (indexEncontrado == 0) {
-            System.out.println("Ningún libro encontrado con esa editorial");
+            System.out.println("Ningún libro encontrado en ese pasillo");
         }
     }
 

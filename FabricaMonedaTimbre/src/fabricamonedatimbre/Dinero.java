@@ -4,10 +4,13 @@
  */
 package fabricamonedatimbre;
 
-public abstract class Dinero {
+import java.io.Serializable;
+
+public abstract class Dinero implements Serializable {
 
     private double valor;
     private int anyoEmi;
+    private static final long serialVersionUID = 1L;
 
     public Dinero(double valor, int anyoEmi) {
         this.valor = valor;

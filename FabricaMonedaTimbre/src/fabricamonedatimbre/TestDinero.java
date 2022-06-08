@@ -163,7 +163,6 @@ public class TestDinero {
                 System.out.println("Has puesto una posicion incorrecta");
             }
         } while (opcion != 9);
-
     }
 
     public static void crearObjetos() {

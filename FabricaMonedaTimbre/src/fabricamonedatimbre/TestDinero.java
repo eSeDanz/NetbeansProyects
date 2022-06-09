@@ -113,6 +113,7 @@ public class TestDinero {
         do {
             try {
                 System.out.print("\nMENU PRINCIPAL:\n"
+                        + "***************\n"
                         + "Opción 1: Crear Objetos\n"
                         + "Opción 2: Mostrar Objetos\n"
                         + "Opción 3: Comprobar duplicados\n"
@@ -205,7 +206,7 @@ public class TestDinero {
             anchura = sc.nextDouble();
             Billete b1 = new Billete(valor, anyoEmi, altura, anchura);
             dineros.add(b1);
-            System.out.println("Billete añadido en el ArrayList\n");
+            System.out.println("Billete añadido en el ArrayList");
         }
     }
 
@@ -214,6 +215,7 @@ public class TestDinero {
             System.out.println("No hay elementos que mostrar");
         } else {
             System.out.println("\nMOSTRANDO OBJETOS");
+            System.out.println("*****************");
             int i = 0;
             for (Dinero elemento : dineros) {
                 System.out.println("\n(" + i + ") " + elemento.toString());
@@ -236,8 +238,8 @@ public class TestDinero {
             }
             if (!duplicados.isEmpty()) {
                 for (Dinero d : duplicados.keySet()) {
-                    System.out.println(d.toString());
-                    System.out.println("Número de repeticiones: " + duplicados.get(d) + "\n");
+                        System.out.println(d.toString());
+                        System.out.println("Número de repeticiones: " + duplicados.get(d) + "\n");
                 }
             } else {
                 System.out.println("No hay duplicados");
@@ -248,6 +250,8 @@ public class TestDinero {
     }
 
     private static void ordenarArray() {
+        System.out.println("\nORDENANDO ARRAYLiST");
+        System.out.println("*******************");
         Comparator<Dinero> c = (d1, d2) -> -d1.compareTo(d2);
         dineros.sort(c);
         System.out.println("El arrayList se ha ordenado");
@@ -255,6 +259,8 @@ public class TestDinero {
 
     private static void copiarObjeto() {
         mostrarPorPantalla();
+        System.out.println("\nCOPiA DE UN OBJETO");
+        System.out.println("******************");
         System.out.print("Indica la posición de la lista que quieres copiar: ");
         int posicion = sc.nextInt();
         sc.nextLine();
@@ -270,7 +276,8 @@ public class TestDinero {
     }
 
     private static void buscar() {
-        System.out.println("\nBusqueda de objeto:");
+        System.out.println("\nBUSQUEDA DE OBJETO");
+        System.out.println("******************");
         System.out.print("Por que atributo quieres buscar? (1):año/(2):valor: ");
         int opcion = sc.nextInt();
         sc.nextLine();
@@ -308,6 +315,8 @@ public class TestDinero {
 
     public static void modificarAtributos() {
         mostrarPorPantalla();
+        System.out.println("\nMODiFiCAR ATRiBUTOS");
+        System.out.println("*******************");
         System.out.print("Indica la posición de la lista que quieres modificar: ");
         int posicion = sc.nextInt();
         sc.nextLine();
@@ -336,6 +345,8 @@ public class TestDinero {
 
     public static void eliminarObjetos() {
         mostrarPorPantalla();
+        System.out.println("\nELiMiNAR UN OBJETO");
+        System.out.println("******************");
         System.out.print("Indica la posición de la lista que quieres eliminar: ");
         int posicion = sc.nextInt();
         sc.nextLine();

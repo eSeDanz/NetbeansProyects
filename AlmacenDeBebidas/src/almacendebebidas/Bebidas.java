@@ -10,14 +10,20 @@ public abstract class Bebidas {
     private double cantidadLitros;
     private double precio;
     private String marca;
+    private static int numTotalBebidas= 0;
 
     public Bebidas(int identificador, double cantidadLitros, double precio, String marca) {
         this.identificador = identificador;
         this.cantidadLitros = cantidadLitros;
         this.precio = precio;
         this.marca = marca;
+        numTotalBebidas++;
     }
 
+    public static int getNumTotalBebidas() {
+        return numTotalBebidas;
+    }   
+    
     public int getIdentificador() {
         return identificador;
     }

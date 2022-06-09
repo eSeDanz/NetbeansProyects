@@ -4,7 +4,25 @@
  */
 package almacendebebidas;
 
-
 public class Agua extends Bebidas {
-    
+
+    private String manantial;
+
+    public Agua(String manantial, int identificador, double cantidadLitros, double precio, String marca) {
+        super(identificador, cantidadLitros, precio, marca);
+        this.manantial = manantial;
+    }
+
+    public String getManantial() {
+        return manantial;
+    }
+
+    public void setManantial(String manantial) {
+        this.manantial = manantial;
+    }
+
+    @Override
+    public String toString() {
+        return "Agua Mineral( " + super.toString() +", Manantial: "+manantial+")";
+    }
 }
